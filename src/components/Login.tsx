@@ -1,6 +1,7 @@
 import React , {useState} from "react";
 import "./Login.css"
 import { Link } from "react-router-dom";
+import Jwt from "jsonwebtoken";
 import {
   MDBCard,
   MDBCardBody,
@@ -20,7 +21,7 @@ const Login = () => {
       usernameOrEmail:username,
       password:password
     }).then(success=>{
-      console.log("Connected",success.data)
+      localStorage.setItem("token",success.data.accessToken)
     }).catch(error=>{
       console.error(error)
     }
