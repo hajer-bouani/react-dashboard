@@ -21,9 +21,10 @@ const Login = () => {
       usernameOrEmail:username,
       password:password
     }).then(success=>{
+      console.log("Connected as",Jwt.decode(success.data.accessToken))
       localStorage.setItem("token",success.data.accessToken)
     }).catch(error=>{
-      console.error(error)
+      console.error(error.data.message)
     }
     )
     event.preventDefault()

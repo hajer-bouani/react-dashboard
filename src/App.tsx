@@ -33,7 +33,7 @@ const App: React.FC = () => {
     {
       const decoded : any = Jwt.decode(token)
       setauthenticatedUser(decoded);
-      console.log(authenticatedUser)
+      console.log("Connected as",decoded)
     }
     else
     console.log("Not connected")

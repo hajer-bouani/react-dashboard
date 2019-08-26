@@ -19,7 +19,7 @@ const Signup = () => {
   const [email,setEmail]= useState("");
   const [password,setPassword]= useState("");
   const handleSubmit =(event: any)=>{
-    console.log("Testing",username,email,password);
+    console.log("Testing",username,email,password,name);
     Axios.post("http://localhost:8080/api/auth/signup",{
       name,
       username,
