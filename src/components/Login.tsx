@@ -1,7 +1,11 @@
-import React , {useState} from "react";
+import React , {useState, useContext} from "react";
+// import  { Redirect } from 'react-router-dom'
+// import { browserHistory } from 'react-router';
 import "./Login.css"
 import { Link } from "react-router-dom";
+import AuthContext from '../context/auth-context'
 import Jwt from "jsonwebtoken";
+// import { Redirect } from 'react-router'
 import {
   MDBCard,
   MDBCardBody,
@@ -12,19 +16,21 @@ import {
   MDBInput
 } from "mdbreact";
 import Axios from "axios";
-const Login = () => {
+const Login = (props: any) => {
   const [username,setUsername]= useState("");
   const [password,setPassword]= useState("");
+  const authContext = useContext(AuthContext)
   const handleSubmit =(event: any)=>{
-    console.log("Testing",username,password);
     Axios.post("http://localhost:8080/api/auth/signin",{
       usernameOrEmail:username,
       password:password
     }).then(success=>{
       console.log("Connected as",Jwt.decode(success.data.accessToken))
-      localStorage.setItem("token",success.data.accessToken)
+      localStorage.setItem("token",success.data.accessToken);
+      props.history.push('/dashboard')
+
     }).catch(error=>{
-      console.error(error.data.message)
+      console.log(error)
     }
     )
     event.preventDefault()
@@ -81,7 +87,6 @@ const Login = () => {
               <MDBModalFooter>
                 <div className="font-weight-light">
                   <p>Not a member? <Link to="/signup/">Sign Up</Link></p>
-                  
                 </div>
               </MDBModalFooter>
             </MDBCardBody>

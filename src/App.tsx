@@ -8,8 +8,10 @@ import TopNavigation from "./components/topNavigation"
 import { BrowserRouter as Router, Route} from "react-router-dom";
 import AuthContext from "./context/auth-context";
 import Jwt from "jsonwebtoken";
-
+import Dashboard from './components/Dashboard';
+import Charts from './components/Charts'
 const App: React.FC = () => {
+  const [isConnected, setIsConnected] = useState(false)
   const [authenticatedUser, setauthenticatedUser] = useState({    
     exp: 1,
     iat: 1,
@@ -33,19 +35,22 @@ const App: React.FC = () => {
     {
       const decoded : any = Jwt.decode(token)
       setauthenticatedUser(decoded);
+      setIsConnected(true);
       console.log("Connected as",decoded)
     }
     else
     console.log("Not connected")
   },[])
   return (
-    <AuthContext.Provider value={{authenticatedUser: authenticatedUser,login : login,register}}>
+    <AuthContext.Provider value={{isConnected,authenticatedUser: authenticatedUser,login : login,register}}>
       
     <Router>
     <TopNavigation></TopNavigation>
-    <div>
-      <Route path="/Login/" component={Login} />
-      <Route path="/SignUp/" component={Signup} />
+    <div className="p-5">
+      <Route path="/login/" component={Login} />
+      <Route path="/signup/" component={Signup} />
+      <Route path="/dashboard2/" component={Charts} />
+      <Route path="/dashboard/" component={Dashboard} />
     </div>
     </Router>
     </AuthContext.Provider>

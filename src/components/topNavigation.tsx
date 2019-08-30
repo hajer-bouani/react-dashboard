@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavbarToggler, MDBCollapse, MDBNavItem, MDBNavLink, MDBIcon } from 'mdbreact';
-
+import AuthContext from "../context/auth-context"
+import "./topNavigation.css"
 const  TopNavigation = () => {
 const [collapse, setCollapse] = useState(false)
 const [dropdownOpen, setdropdownOpen] = useState(false)
@@ -8,47 +9,32 @@ const [dropdownOpen, setdropdownOpen] = useState(false)
         setCollapse(!collapse)
     }
 
+                
+    
     const toggle = () => {
         setdropdownOpen(!dropdownOpen)
     }
 
         return (
-            <MDBNavbar className="flexible-navbar" light expand="md" scrolling>
-                <MDBNavbarBrand href="/">
-                    <strong>MDB</strong>
-                </MDBNavbarBrand>
-                <MDBNavbarToggler onClick = { click } />
-                <MDBCollapse isOpen = { collapse } navbar>
-                    <MDBNavbarNav left>
-                        <MDBNavItem active>
-                            <MDBNavLink to="#">Home</MDBNavLink>
-                        </MDBNavItem>
-                        <MDBNavItem>
-                            <a rel="noopener noreferrer" className="nav-link Ripple-parent" href="https://mdbootstrap.com/docs/react/" target="_blank">About MDB</a>
-                        </MDBNavItem>
-                        <MDBNavItem>
-                            <a rel="noopener noreferrer" className="nav-link Ripple-parent" href="https://mdbootstrap.com/docs/react/getting-started/download/" target="_blank">Free download</a>
-                        </MDBNavItem>
-                        <MDBNavItem>
-                            <a rel="noopener noreferrer"  className="nav-link Ripple-parent" href="https://mdbootstrap.com/bootstrap-tutorial/" target="_blank">Free tutorials</a>
-                        </MDBNavItem>
-                    </MDBNavbarNav>
-                    <MDBNavbarNav right>
-                        <MDBNavItem>
-                            <a className="nav-link navbar-link" rel="noopener noreferrer" target="_blank" href="https://pl-pl.facebook.com/mdbootstrap/"><MDBIcon fab icon="facebook" /></a>
-                        </MDBNavItem>
-                        <MDBNavItem>
-                            <a className="nav-link navbar-link" rel="noopener noreferrer" target="_blank" href="https://twitter.com/mdbootstrap"><MDBIcon fab icon="twitter" /></a>
-                        </MDBNavItem>
-                        <MDBNavItem>
-                            <a className="border border-light rounded mr-1 nav-link Ripple-parent" rel="noopener noreferrer" href="https://github.com/mdbootstrap/React-Bootstrap-with-Material-Design" target="_blank"><MDBIcon fab icon="github" className="mr-2"/>MDB GitHub</a>
-                        </MDBNavItem>
-                        <MDBNavItem>
-                            <a className="border border-light rounded mr-1 nav-link Ripple-parent" rel="noopener noreferrer" href="https://mdbootstrap.com/products/react-ui-kit/" target="_blank"><MDBIcon fab icon="github" className="mr-2"/>Go Pro</a>
-                        </MDBNavItem>
-                    </MDBNavbarNav>
-                </MDBCollapse>
-            </MDBNavbar>
+            <AuthContext.Consumer>
+                {(context)=>{
+                    return <MDBNavbar className="flexible-navbar" light expand="md" scrolling>
+                    <MDBNavbarBrand href="/">
+                        <strong>Home</strong>
+                    </MDBNavbarBrand>
+                    <MDBNavbarToggler onClick = { click } />
+                    <MDBCollapse isOpen = { collapse } navbar>
+                        
+                        {
+
+                            context.isConnected ? <MDBNavbarNav right><MDBNavItem><MDBNavLink to="/dashboard">Dashboard</MDBNavLink></MDBNavItem><MDBNavItem><MDBNavLink to="/dashboard">{context.authenticatedUser.name}</MDBNavLink></MDBNavItem></MDBNavbarNav> : <MDBNavbarNav right><MDBNavItem><MDBNavLink to="/login"><MDBIcon icon="sign-in-alt" className="mr-2"/>Login</MDBNavLink></MDBNavItem><MDBNavItem><MDBNavLink to="/register"><MDBIcon icon="user-plus" className="mr-2"/>Register</MDBNavLink></MDBNavItem></MDBNavbarNav>
+                        }
+                        
+                    </MDBCollapse>
+                </MDBNavbar>
+                }}
+            </AuthContext.Consumer>
+            
         );
     
 }
