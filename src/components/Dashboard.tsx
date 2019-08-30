@@ -1,9 +1,14 @@
 import React , {useState, useEffect} from 'react'
 import Axios from 'axios'
 import { MDBDataTable } from 'mdbreact';
-
+import { MDBCol, MDBCard, MDBCardBody, MDBCardHeader, MDBRow, MDBListGroup, MDBListGroupItem, MDBBadge, MDBIcon } from 'mdbreact';
+import {Pie } from 'react-chartjs-2';
+import  moment from 'moment'
+import { Content } from '../models';
 const Dashboard = () =>{
-
+  const toDate = (date: string) => {
+    return moment.parseZone(date,"ddd-MMM-DD-HH-mm-ss-----gggg").toDate()
+  }
     const [data, setData] = useState({
         columns:[
             {
@@ -44,21 +49,139 @@ const Dashboard = () =>{
         ],
         rows:[]
     })
+    const pieLabels =['FATAL', 'ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE']
+    const pieColors = {
+      backgroundColor: ['#8B0000', '#FF0000', '#FFFF00', '#008000', '#00FFFF', '#808080'],
+      hoverBackgroundColor: ['#800000', '#B22222', '#ADFF2F', '##006400', '#00FFFF', '##A9A9A9']
+    }
+    const [latestDataPie, setLatestDataPie] = useState({
+      labels: pieLabels,
+      datasets: [
+        {
+          data: [0, 0, 0, 0, 0, 0],
+          ...pieColors
+        }
+      ]
+    })
+    const [dataPie, setDataPie] = useState({
+      labels: pieLabels,
+      datasets: [
+        {
+          data: [0, 0, 0, 0, 0, 0],
+            // data: [300, 50, 100, 40, 120, 24],
+            ...pieColors
+            }
+          ]
+    })
+    const setPie= (array: Content[]) =>{
+      let result = [0,0,0,0,0,0]
+      let resultLatest = [0,0,0,0,0,0]
+      const minDate = moment().subtract(3, 'days').toDate()
+      for (const iterator of array) {
+        if(toDate(iterator.timestamp)>minDate){
+          switch (iterator.eventType) {
+            case 'FATAL':
+              resultLatest[0]++
+              break;
+            case 'ERROR':
+              resultLatest[1]++
+              break;
+            case 'WARN':
+              resultLatest[2]++
+              break;
+            case 'INFO':
+              resultLatest[3]++
+              break;
+            case 'DEBUG':
+              resultLatest[4]++
+              break;
+            case 'TRACE':
+              resultLatest[5]++
+              break;
+          }
+        }
+        switch (iterator.eventType) {
+            case 'FATAL':
+              result[0]++
+              break;
+            case 'ERROR':
+              result[1]++
+              break;
+            case 'WARN':
+              result[2]++
+              break;
+            case 'INFO':
+              result[3]++
+              break;
+            case 'DEBUG':
+              result[4]++
+              break;
+            case 'TRACE':
+              result[5]++
+              break;
+          }
+      }
+      setDataPie({
+        labels: pieLabels,
+        datasets: [
+          {
+            data: result,
+            ...pieColors
+          }
+        ]
+      })
+      setLatestDataPie({
+        labels: pieLabels,
+        datasets: [
+          {
+            data: resultLatest,
+            ...pieColors
+          }
+        ]
+      })
+    }
 
     useEffect(()=>{
       Axios.get("https://athos.hydra-it.com/athos/360view/v1/events")
       .then((response)=>{
           const rows : [] = response.data.content
           setData({...data,rows})
+          setPie(rows)
       })
     },[])
 
-    return <MDBDataTable
+    return <React.Fragment>
+      <MDBRow className="mb-4">
+                <MDBCol md="5" className="mb-4">
+                    <MDBCard className="mb-4">
+                        <MDBCardHeader>Events</MDBCardHeader>
+                        <MDBCardBody>
+                            <Pie data={dataPie} height={300} options={{responsive: true}} />
+                        </MDBCardBody>
+                    </MDBCard>
+                    </MDBCol>
+                    <MDBCol md="5" className="mb-4">
+                    <MDBCard className="mb-4">
+                        <MDBCardHeader>Events(Last 3 days)</MDBCardHeader>
+                        <MDBCardBody>
+                            <Pie data={latestDataPie} height={300} options={{responsive: true}} />
+                        </MDBCardBody>
+                    </MDBCard>
+                    </MDBCol>
+            </MDBRow>
+      <MDBRow className="mb-4">
+      <MDBCol md="10" className="mb-4">
+      <MDBDataTable
     striped
     bordered
     hover
     data={data}
   />
+  </MDBCol>
+  </MDBRow>
+  
+    </React.Fragment>
+    
 }
 
 export default Dashboard

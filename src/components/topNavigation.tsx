@@ -27,7 +27,7 @@ const [dropdownOpen, setdropdownOpen] = useState(false)
                         
                         {
 
-                            context.isConnected ? <MDBNavbarNav right><MDBNavItem><MDBNavLink to="/dashboard">Dashboard</MDBNavLink></MDBNavItem><MDBNavItem><MDBNavLink to="/dashboard">{context.authenticatedUser.name}</MDBNavLink></MDBNavItem></MDBNavbarNav> : <MDBNavbarNav right><MDBNavItem><MDBNavLink to="/login"><MDBIcon icon="sign-in-alt" className="mr-2"/>Login</MDBNavLink></MDBNavItem><MDBNavItem><MDBNavLink to="/register"><MDBIcon icon="user-plus" className="mr-2"/>Register</MDBNavLink></MDBNavItem></MDBNavbarNav>
+                            context.isConnected ? <MDBNavbarNav right><MDBNavItem><MDBNavLink to="/dashboard">Dashboard</MDBNavLink></MDBNavItem><MDBNavItem><MDBNavLink to="/dashboard">{context.authenticatedUser.name}</MDBNavLink></MDBNavItem></MDBNavbarNav> : <MDBNavbarNav right><MDBNavItem><MDBNavLink to="/login"><MDBIcon icon="sign-in-alt" className="mr-2"/>Login</MDBNavLink></MDBNavItem><MDBNavItem><MDBNavLink to="/signup"><MDBIcon icon="user-plus" className="mr-2"/>Sign up</MDBNavLink></MDBNavItem></MDBNavbarNav>
                         }
                         
                     </MDBCollapse>

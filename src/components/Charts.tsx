@@ -1,59 +1,30 @@
 import React, { useState } from 'react';
 import { MDBCol, MDBCard, MDBCardBody, MDBCardHeader, MDBRow, MDBListGroup, MDBListGroupItem, MDBBadge, MDBIcon } from 'mdbreact';
-import { Bar, Pie } from 'react-chartjs-2';
+import {Pie } from 'react-chartjs-2';
 
 const Charts  = () =>{
-        const [dataBar, setDataBar] = useState({
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        
+        const pieLabels =['FATAL', 'ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE']
+        const pieColors = {
+            backgroundColor: ['#8B0000', '#FF0000', '#FFFF00', '#008000', '#00FFFF', '#808080'],
+            hoverBackgroundColor: ['#800000', '#B22222', '#ADFF2F', '##006400', '#00FFFF', '##A9A9A9']
+        }
+        const [latestDataPie, setLatestDataPie] = useState({
+            labels: pieLabels,
             datasets: [
             {
-                label: '#1',
-                data: [12, 39, 3, 50, 2, 32, 84],
-                backgroundColor: 'rgba(245, 74, 85, 0.5)',
-                borderWidth: 1
-            }, {
-                label: '#2',
-                data: [56, 24, 5, 16, 45, 24, 8],
-                backgroundColor: 'rgba(90, 173, 246, 0.5)',
-                borderWidth: 1
-            }, {
-                label: '#3',
-                data: [12, 25, 54, 3, 15, 44, 3],
-                backgroundColor: 'rgba(245, 192, 50, 0.5)',
-                borderWidth: 1
-            }
+                data: [300, 50, 100, 40, 120, 24],
+                ...pieColors
+                }
             ]
         })
-        const [barChartOptions, setbarChartOptions] = useState({
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-            xAxes: [{
-                barPercentage: 1,
-                gridLines: {
-                display: true,
-                color: 'rgba(0, 0, 0, 0.1)'
-                }
-            }],
-            yAxes: [{
-                gridLines: {
-                display: true,
-                color: 'rgba(0, 0, 0, 0.1)'
-                },
-                ticks: {
-                beginAtZero: true
-                }
-            }]
-            }
-        })
         const [dataPie, setDataPie] = useState({
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+            labels: pieLabels,
             datasets: [
             {
-                data: [300, 50, 100, 40, 120, 24, 52],
-                backgroundColor: ['#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360', '#ac64ad'],
-                hoverBackgroundColor: ['#FF5A5E', '#5AD3D1', '#FFC870', '#A8B3C5', '#616774', '#da92db']
-            }
+                data: [300, 50, 100, 40, 120, 24],
+                ...pieColors
+                }
             ]
         })
         
