@@ -57,6 +57,50 @@ const Dashboard = () =>{
         ],
         rows:[]
     })
+    const [eventsPerUser, setEventsPerUser] = useState({
+      columns:[
+          {
+              label: 'Login ID',
+              field: 'loginid',
+              sort: 'asc',
+            },
+          {
+              label: 'Total',
+              field: 'total',
+              sort: 'asc',
+            },
+            {
+              label: 'FATAL',
+              field: 'fatal',
+              sort: 'asc',
+            },
+            {
+              label: 'ERROR',
+              field: 'error',
+              sort: 'asc',
+            },
+            {
+              label: 'WARN',
+              field: 'warn',
+              sort: 'asc',
+            },
+            {
+              label: 'INFO',
+              field: 'info',
+              sort: 'asc',
+            },
+          {
+              label: 'DEBUG',
+              field: 'debug',
+              sort: 'asc',
+            },
+          {
+              label: 'TRACE',
+              field: 'trace',
+              sort: 'asc',
+            },
+      ],
+      rows:[{loginid:"test",fatal:0,error:0,info:0,debug:0,trace:0}]})
     const pieLabels =['FATAL', 'ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE']
     const pieColors = {
       backgroundColor: ['#8B0000', '#FF0000', '#FFFF00', '#008000', '#00FFFF', '#808080'],
@@ -150,20 +194,92 @@ const Dashboard = () =>{
         ]
       })
     }
+    const getIdInTable = (array : any[],loginid: string) =>{
+      for (const key in array) {
+        if (array[key].loginid === loginid)
+        return key
+      }
+      return null
+    }
+
+
+    const setEventsPerUserData = (myData: any) =>{
+      let result: any[] = [];
+      
+      console.log("My data",myData)
+      for (const iterator of myData) {
+        
+        const i:any = getIdInTable(result,iterator.loginid)
+        if (i!=null){
+          console.log("found")
+          result[i].total++
+          switch (iterator.eventType) {
+            case 'FATAL':
+              result[i].fatal++
+              break;
+            case 'ERROR':
+              result[i].error++
+              break;
+            case 'WARN':
+              result[i].warn++
+              break;
+            case 'INFO':
+              result[i].info++
+              break;
+            case 'DEBUG':
+              result[i].debug++
+              break;
+            case 'TRACE':
+              result[i].trace++
+              break;
+        }
+      }
+      else{
+        let temp = {loginid:iterator.loginid,total:1,fatal:0,error:0,warn:0,info:0,debug:0,trace:0}
+        switch (iterator.eventType) {
+          case 'FATAL':
+            temp["fatal"]++
+            break;
+          case 'ERROR':
+            temp["error"]++
+            break;
+          case 'WARN':
+            temp["warn"]++
+            break;
+          case 'INFO':
+            temp["info"]++
+            break;
+          case 'DEBUG':
+            temp["debug"]++
+            break;
+          case 'TRACE':
+            temp["trace"]++
+            break;
+      }
+      console.log("temp",temp)
+      result.push(temp)
+      }
+    }
+    console.log(result)
+    setEventsPerUser({...eventsPerUser,rows:result})
+    console.log(eventsPerUser)
+    }
     // Utilisation de useEffect pour executer du code des la creation du component app
     useEffect(()=>{
       // Envoie de requte en utilisant axios
+      setEventsPerUser({...eventsPerUser,rows:[]})
       Axios.get("https://athos.hydra-it.com/athos/360view/v1/events")
       .then((response)=>{
           const rows : [] = response.data.content
           setData({...data,rows})
           setPie(rows)
+          setEventsPerUserData(rows)
       })
     },[])
 // Le resultat retourné par le code JSX
     return <React.Fragment>
       <MDBRow className="mb-4">
-                <MDBCol md="5" className="mb-4">
+                <MDBCol md="4" className="mb-4">
                     <MDBCard className="mb-4">
                         <MDBCardHeader>Events</MDBCardHeader>
                         <MDBCardBody>
@@ -171,7 +287,7 @@ const Dashboard = () =>{
                         </MDBCardBody>
                     </MDBCard>
                     </MDBCol>
-                    <MDBCol md="5" className="mb-4">
+                    <MDBCol md="4" className="mb-4">
                     <MDBCard className="mb-4">
                         <MDBCardHeader>Events(Last 3 days)</MDBCardHeader>
                         <MDBCardBody>
@@ -179,15 +295,31 @@ const Dashboard = () =>{
                         </MDBCardBody>
                     </MDBCard>
                     </MDBCol>
+                
             </MDBRow>
+      <MDBRow className="mb-4">
+      <MDBCol md="10" className="mb-10">
+                    <MDBCard className="mb-10">
+                        <MDBCardHeader>Events per user</MDBCardHeader>
+                        <MDBCardBody>
+                        <MDBDataTable
+                          striped
+                          bordered
+                          hover
+                          data={eventsPerUser}
+                        />
+                        </MDBCardBody>
+                    </MDBCard>
+                    </MDBCol>
+      </MDBRow>
       <MDBRow className="mb-4">
       <MDBCol md="10" className="mb-4">
       <MDBDataTable
-    striped
-    bordered
-    hover
-    data={data}
-  />
+        striped
+        bordered
+        hover
+        data={data}
+      />
   </MDBCol>
   </MDBRow>
   
