@@ -16,6 +16,8 @@ const [dropdownOpen, setdropdownOpen] = useState(false)
     }
 
         return (
+
+            // Consomation du contexte auth
             <AuthContext.Consumer>
                 {(context)=>{
                     return <MDBNavbar className="flexible-navbar" light expand="md" scrolling>

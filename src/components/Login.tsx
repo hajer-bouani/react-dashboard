@@ -1,11 +1,12 @@
+
+// Les imports 
 import React , {useState, useContext} from "react";
-// import  { Redirect } from 'react-router-dom'
-// import { browserHistory } from 'react-router';
+
 import "./Login.css"
 import { Link } from "react-router-dom";
 import AuthContext from '../context/auth-context'
 import Jwt from "jsonwebtoken";
-// import { Redirect } from 'react-router'
+
 import {
   MDBCard,
   MDBCardBody,
@@ -16,20 +17,32 @@ import {
   MDBInput
 } from "mdbreact";
 import Axios from "axios";
+
+// dans le nouveaux concept de react on evite d'utiliser les classes alors on utilise des entites sous forme de constantes
 const Login = (props: any) => {
+
+  /* Les entites et leurs settets
+       en utilisant le useState qui permet de gerer les entites dans un composant
+  */
   const [username,setUsername]= useState("");
   const [password,setPassword]= useState("");
   const authContext = useContext(AuthContext)
+  // Dans des constants on ne peut pas declarer une fonction dans on utilise les "Arrow functions"
   const handleSubmit =(event: any)=>{
+    // Envoie de requetes avec axios
     Axios.post("http://localhost:8080/api/auth/signin",{
       usernameOrEmail:username,
       password:password
     }).then(success=>{
-      console.log("Connected as",Jwt.decode(success.data.accessToken))
+      // Traitement en cas de success
+      console.log("Connetcetd as", Jwt.decode(success.data.accessToken))
       localStorage.setItem("token",success.data.accessToken);
+      authContext.setUser(Jwt.decode(success.data.accessToken));
+      authContext.setIsConnected(true)
       props.history.push('/dashboard')
 
     }).catch(error=>{
+      // Traitement en cas d'erreur
       console.log(error)
     }
     )
@@ -41,9 +54,11 @@ const Login = (props: any) => {
   const handlePasswordChange = (event: any) =>{
     setPassword(event.target.value)
   }
+
+
+  // Le resultat retourné par le code JSX
   return (
     <div className="d-flex justify-content-center full-height-width">    
-      
           <MDBCard className="my-card">
             <MDBCardBody>
               <MDBCardHeader className="form-header deep-blue-gradient rounded">

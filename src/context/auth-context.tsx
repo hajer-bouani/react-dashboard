@@ -1,5 +1,9 @@
+
+// Les imports 
 import React from 'react'
-import Axios from 'axios'
+
+
+// Declaration du context auth qui est reponsable de gerer les etats globals reliés à l'authentification 
 const authContext = React.createContext(
     {
     isConnected: false,
@@ -11,16 +15,8 @@ const authContext = React.createContext(
         sub: "0",
         username: "username"
       },
-    login: (email: string,password: string)=>{
-
-    },
-    register: (
-        name: string,
-        username: string,
-        password: string,
-        email: string)=>{
-    }
-
+    setIsConnected: (state:boolean)=>{},
+    setUser: (user:any)=>{},
 });
 
 export default authContext;

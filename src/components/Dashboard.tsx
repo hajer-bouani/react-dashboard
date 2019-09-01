@@ -1,14 +1,22 @@
+// Les imports
 import React , {useState, useEffect} from 'react'
 import Axios from 'axios'
 import { MDBDataTable } from 'mdbreact';
-import { MDBCol, MDBCard, MDBCardBody, MDBCardHeader, MDBRow, MDBListGroup, MDBListGroupItem, MDBBadge, MDBIcon } from 'mdbreact';
+import { MDBCol, MDBCard, MDBCardBody, MDBCardHeader, MDBRow} from 'mdbreact';
 import {Pie } from 'react-chartjs-2';
 import  moment from 'moment'
 import { Content } from '../models';
+
+// Dans le nouveaux concept de react on evite d'utiliser les classes alors on utilise des entites sous forme de constantes
 const Dashboard = () =>{
+  // Transformation de la date de format java vers le format javascript
   const toDate = (date: string) => {
     return moment.parseZone(date,"ddd-MMM-DD-HH-mm-ss-----gggg").toDate()
   }
+
+  /* Les entites et leurs settets
+     en utilisant le useState qui permet de gerer les entites dans un composant
+*/
     const [data, setData] = useState({
         columns:[
             {
@@ -73,6 +81,8 @@ const Dashboard = () =>{
             }
           ]
     })
+
+    // Changer les information affiches dans la pie chart
     const setPie= (array: Content[]) =>{
       let result = [0,0,0,0,0,0]
       let resultLatest = [0,0,0,0,0,0]
@@ -140,8 +150,9 @@ const Dashboard = () =>{
         ]
       })
     }
-
+    // Utilisation de useEffect pour executer du code des la creation du component app
     useEffect(()=>{
+      // Envoie de requte en utilisant axios
       Axios.get("https://athos.hydra-it.com/athos/360view/v1/events")
       .then((response)=>{
           const rows : [] = response.data.content
@@ -149,7 +160,7 @@ const Dashboard = () =>{
           setPie(rows)
       })
     },[])
-
+// Le resultat retourné par le code JSX
     return <React.Fragment>
       <MDBRow className="mb-4">
                 <MDBCol md="5" className="mb-4">

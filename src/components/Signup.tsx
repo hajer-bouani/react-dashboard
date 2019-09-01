@@ -1,3 +1,4 @@
+// Les imports
 import React , {useState} from "react";
 import "./Login.css"
 import Axios from "axios"
@@ -12,7 +13,7 @@ import {
   MDBBtn,
   MDBInput
 } from "mdbreact";
-
+// Le code
 const Signup = () => {
   const [username,setUsername]= useState("");
   const [name,setName]= useState("");
@@ -20,6 +21,7 @@ const Signup = () => {
   const [password,setPassword]= useState("");
   const handleSubmit =(event: any)=>{
     console.log("Testing",username,email,password,name);
+    // envoie de requete Post en utilisant axios
     Axios.post("http://localhost:8080/api/auth/signup",{
       name,
       username,
@@ -44,6 +46,8 @@ const Signup = () => {
   const handlePasswordChange = (event: any) =>{
     setPassword(event.target.value)
   }
+
+  // Le retour ( code JSX )
   return (
     <div className="d-flex justify-content-center full-height-width">    
       
