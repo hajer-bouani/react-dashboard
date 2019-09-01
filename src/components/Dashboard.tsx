@@ -14,7 +14,7 @@ const Dashboard = () =>{
     return moment.parseZone(date,"ddd-MMM-DD-HH-mm-ss-----gggg").toDate()
   }
 
-  /* Les entites et leurs settets
+  /* Les entites et leurs setters
      en utilisant le useState qui permet de gerer les entites dans un composant
 */
     const [data, setData] = useState({
